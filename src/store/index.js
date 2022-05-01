@@ -10,6 +10,9 @@ import axios from "@nextcloud/axios"
 
 Vue.use(Vuex)
 
+const SHOW_TAG_CLOUD_IN_RECIPE_LIST = "showTagCloudInRecipeList";
+const TEMPLATES = "templates";
+
 // We are using the vuex store linking changes within the components to updates in the navigation panel.
 export default new Vuex.Store({
     // Vuex store handles value changes through actions and mutations.
@@ -45,18 +48,17 @@ export default new Vuex.Store({
         categoryUpdating: null,
         localSettings: {
             showTagCloudInRecipeList: true,
+            templates: []
         },
     },
 
     mutations: {
         initializeStore(state) {
-            if (localStorage.getItem("showTagCloudInRecipeList")) {
-                state.localSettings.showTagCloudInRecipeList = JSON.parse(
-                    localStorage.getItem("showTagCloudInRecipeList")
-                )
-            } else {
-                state.localSettings.showTagCloudInRecipeList = true
-            }
+            const showTagCloudInRecipeList = localStorage.getItem(SHOW_TAG_CLOUD_IN_RECIPE_LIST)
+            state.localSettings.showTagCloudInRecipeList = showTagCloudInRecipeList ?  JSON.parse(showTagCloudInRecipeList) : true
+
+            const templates = localStorage.getItem(TEMPLATES);
+            state.localSettings.templates = templates ? JSON.parse(templates) : [];
         },
         setAppNavigationRefreshRequired(state, { b }) {
             state.appNavigation.refreshRequired = b
@@ -98,7 +100,7 @@ export default new Vuex.Store({
             state.savingRecipe = b
         },
         setShowTagCloudInRecipeList(state, { b }) {
-            localStorage.setItem("showTagCloudInRecipeList", JSON.stringify(b))
+            localStorage.setItem(SHOW_TAG_CLOUD_IN_RECIPE_LIST, JSON.stringify(b))
             state.localSettings.showTagCloudInRecipeList = b
         },
         setUser(state, { u }) {
@@ -106,6 +108,10 @@ export default new Vuex.Store({
         },
         setUpdatingRecipeDirectory(state, { b }) {
             state.updatingRecipeDirectory = b
+        },
+        setTemplates(state, { templates }) {
+            localStorage.setItem(TEMPLATES, JSON.stringify(templates));
+            state.localSettings.templates = templates;
         },
     },
 
@@ -170,6 +176,9 @@ export default new Vuex.Store({
         },
         setShowTagCloudInRecipeList(c, { showTagCloud }) {
             c.commit("setShowTagCloudInRecipeList", { b: showTagCloud })
+        },
+        setTemplates(c, { templates }) {
+            c.commit("setTemplates", { templates })
         },
         updateCategoryName(c, { categoryNames }) {
             const oldName = categoryNames[0]

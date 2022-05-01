@@ -20,6 +20,47 @@
                 {{ t("cookbook", "Download recipe from URL") }}
             </ActionInput>
 
+            <li class="templates">
+                <Actions
+                    default-icon="icon-projects"
+                    menu-title="Select Template"
+                >
+                    <ActionRadio
+                        name="uniqueId"
+                        @change="alert('(un)checked !')"
+                    >
+                        First choice
+                    </ActionRadio>
+                    <ActionRadio
+                        value="second"
+                        name="uniqueId"
+                        @change="alert('(un)checked !')"
+                    >
+                        Second choice
+                    </ActionRadio>
+                    <ActionRadio
+                        :checked="true"
+                        name="uniqueId"
+                        @change="alert('(un)checked !')"
+                    >
+                        Third choice (checked)
+                    </ActionRadio>
+                </Actions>
+                <ActionButton
+                    icon="icon-template-add"
+                    @click="openTemplateModal"
+                >
+                    New
+                </ActionButton>
+                <modal
+                    v-if="showTemplateModal"
+                    size="small"
+                    @close="closeTemplateModal"
+                >
+                    <div class="modal__content">Hello world</div>
+                </modal>
+            </li>
+
             <AppNavigationItem
                 :title="t('cookbook', 'All recipes')"
                 icon="icon-category-organization"
@@ -109,12 +150,15 @@
 
 <script>
 import axios from "@nextcloud/axios"
+import Actions from "@nextcloud/vue/dist/Components/Actions"
+import ActionRadio from "@nextcloud/vue/dist/Components/ActionRadio"
 import ActionButton from "@nextcloud/vue/dist/Components/ActionButton"
 import ActionInput from "@nextcloud/vue/dist/Components/ActionInput"
 import AppNavigation from "@nextcloud/vue/dist/Components/AppNavigation"
 import AppNavigationCounter from "@nextcloud/vue/dist/Components/AppNavigationCounter"
 import AppNavigationItem from "@nextcloud/vue/dist/Components/AppNavigationItem"
 import AppNavigationNew from "@nextcloud/vue/dist/Components/AppNavigationNew"
+import Modal from "@nextcloud/vue/dist/Components/Modal"
 import Vue from "vue"
 import AppSettings from "./AppSettings.vue"
 import AppNavigationCaption from "./AppNavigationCaption.vue"
@@ -122,6 +166,9 @@ import AppNavigationCaption from "./AppNavigationCaption.vue"
 export default {
     name: "AppNavi",
     components: {
+        Modal,
+        Actions,
+        ActionRadio,
         ActionButton,
         ActionInput,
         AppNavigation,
@@ -140,6 +187,7 @@ export default {
             loading: { categories: true },
             scanningLibrary: false,
             uncatRecipes: 0,
+            showTemplateModal: false,
         }
     },
     computed: {
@@ -158,6 +206,9 @@ export default {
         categoryUpdating() {
             return this.isCategoryUpdating
         },
+        getTemplates() {
+            return this.$store.state.localSettings.templates
+        },
     },
     watch: {
         // Register a method hook for navigation refreshing
@@ -171,6 +222,12 @@ export default {
         this.getCategories()
     },
     methods: {
+        openTemplateModal() {
+            this.showTemplateModal = true
+        },
+        closeTemplateModal() {
+            this.showTemplateModal = false
+        },
         /**
          * Enable renaming of categories.
          */
@@ -443,21 +500,19 @@ export default {
 </script>
 
 <style scoped>
->>> .app-navigation-new button {
+.app-navigation-new button {
     min-height: 44px;
     background-image: var(--icon-add-000);
     background-repeat: no-repeat;
 }
 
->>> .app-navigation-entry.recipe {
+.app-navigation-entry.recipe {
     /* Let's not waste space in front of the recipe if we're only using the icon to show loading */
     padding-left: 0;
 }
 
 /* stylelint-disable selector-class-pattern */
->>> .app-navigation-entry
-    .app-navigation-entry__children
-    .app-navigation-entry {
+.app-navigation-entry .app-navigation-entry__children .app-navigation-entry {
     /* Let's not waste space in front of the recipe if we're only using the icon to show loading */
     padding-left: 0;
 }
@@ -467,10 +522,21 @@ export default {
     box-shadow: inset 4px 0 rgba(255, 255, 255, 1);
 }
 
->>> .app-navigation-entry.recipe:hover,
->>> .app-navigation-entry.router-link-exact-active {
+.app-navigation-entry.recipe:hover,
+.app-navigation-entry.router-link-exact-active {
     box-shadow: inset 4px 0 var(--color-primary);
     opacity: 1;
+}
+
+.templates {
+    display: flex;
+    padding: 8px;
+    margin-bottom: 8px;
+}
+
+.modal__content {
+    margin: 50px;
+    text-align: center;
 }
 
 @media print {
