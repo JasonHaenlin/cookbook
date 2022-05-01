@@ -132,14 +132,15 @@ export default {
 .time {
     position: relative;
     flex-grow: 1;
-    border: 1px solid var(--color-border-dark);
     margin: 1rem 2rem;
-    border-radius: 3px;
     font-size: 1.2rem;
     text-align: center;
+    border-radius: 9px;
+    border: 1px solid var(--color-primary-element-lighter);
 }
 
 .time button {
+    background-color: var(--color-primary-element-light);
     position: absolute;
     top: 0;
     left: 0;
@@ -150,8 +151,7 @@ export default {
 
 .time h4 {
     padding: 0.5rem;
-    border-bottom: 1px solid var(--color-border-dark);
-    background-color: var(--color-background-dark);
+    background-color: var(--color-primary-element-lighter);
     font-weight: bold;
 }
 

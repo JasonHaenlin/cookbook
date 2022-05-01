@@ -588,6 +588,7 @@ export default {
 
 .dates {
     font-size: 0.9em;
+    color: var(--color-text-maxcontrast);
 }
 
 .date {
@@ -639,7 +640,6 @@ export default {
 .times .time {
     position: relative;
     flex-grow: 1;
-    border: 1px solid var(--color-border-dark);
     margin: 1rem 2rem;
     border-radius: 3px;
     font-size: 1.2rem;
@@ -752,6 +752,18 @@ main {
         width: 100%;
         flex-basis: 100%;
     }
+}
+
+h2 {
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+h3 {
+    color: var(--color-primary-element);
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .instructions {

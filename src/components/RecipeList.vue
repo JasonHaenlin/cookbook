@@ -12,7 +12,7 @@
                 v-model="orderBy"
                 class="recipes-sorting-dropdown"
                 :multiple="false"
-                :searchable="false"
+                :searchable="false" 
                 :placeholder="t('cookbook', 'Select order')"
                 :options="recipeOrderingOptions"
             >
